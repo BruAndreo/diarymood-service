@@ -1,5 +1,7 @@
+import { config } from "dotenv";
+config();
 
-export default {
+export const envVars = {
   PORT: process.env.SERVER_PORT,
   DATABASE: {
     DBNAME: process.env.DATABASE_NAME,
