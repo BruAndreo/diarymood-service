@@ -1,6 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import DBConnector from "../database/dbConnector.js";
-import MoodModel from "../model/moodModel.js";
+import MoodService from "../service/moodService.js";
 
 export default class MoodsController {
 
@@ -8,21 +7,15 @@ export default class MoodsController {
     try {
       const body = req.body;
 
-      const conn = await DBConnector.getConnection();
-
-      const moodModel = MoodModel.load(conn);
-
-      const mood = new moodModel(body);
-      await mood.save();
-
-      DBConnector.close();
+      const service = new MoodService();
+      service.insertNewMood(body);
 
       return res.status(StatusCodes.CREATED).json({
         message: "Mood registered"
       });
     }
     catch (e) {
-      console.error(`ERROR: ${e.message}`);
+      console.log("ERROR: ", e.message);
 
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
         message: e.message
