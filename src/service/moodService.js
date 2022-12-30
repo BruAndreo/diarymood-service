@@ -9,12 +9,13 @@ export default class MoodService {
 
       const mood = new MoodModel(newMood);
       await mood.save();
-
-      DBConnector.close();
     }
     catch (e) {
       console.error("Insert new mood error: ", e.message);
       throw new Error("Falha ao inserir novo Mood");
+    }
+    finally {
+      DBConnector.close();
     }
   }
 

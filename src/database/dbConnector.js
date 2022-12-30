@@ -19,7 +19,7 @@ export default class DBConnector {
   }
 
   static close() {
-    mongoose.connection.close();
+    mongoose.disconnect();
   }
 
 }

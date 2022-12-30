@@ -10,6 +10,10 @@ global.console = {
 
 describe("Mood Service", () => {
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("Should connect with DB one time, and close one time", async () => {
     jest.spyOn(DBConnector, 'setUp').mockResolvedValueOnce({});
     jest.spyOn(DBConnector, 'close').mockResolvedValueOnce();
@@ -38,6 +42,22 @@ describe("Mood Service", () => {
     }
 
     expect(t).rejects.toThrow(Error);
+  });
+
+  it("Should return error when has fail to save new mood", async () => {
+    jest.spyOn(DBConnector, 'setUp').mockResolvedValueOnce({});
+    jest.spyOn(DBConnector, 'close').mockResolvedValueOnce();
+
+    mockingoose(MoodModel).toReturn(new Error("Mocking Save error"), 'save');
+
+    const t = async () => {
+      const service = new MoodService();
+      await service.insertNewMood({});
+    }
+
+    expect(t).rejects.toThrow(Error);
+    expect(DBConnector.setUp).toHaveBeenCalledTimes(1);
+    expect(DBConnector.close).toHaveBeenCalledTimes(1);
   });
 
 });
