@@ -5,11 +5,9 @@ export default class MoodService {
 
   async insertNewMood(newMood) {
     try {
-      const conn = await DBConnector.getConnection();
+      await DBConnector.setUp();
 
-      const moodModel = MoodModel.load(conn);
-
-      const mood = new moodModel(newMood);
+      const mood = new MoodModel(newMood);
       await mood.save();
 
       DBConnector.close();

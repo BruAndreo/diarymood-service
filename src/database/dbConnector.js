@@ -9,7 +9,7 @@ export default class DBConnector {
     return `mongodb://${HOST}:${PORT}/${DBNAME}`;
   }
 
-  static async getConnection() {
+  static async setUp() {
     return await mongoose.connect(DBConnector._getStringConnection(), {
         authSource: "admin",
         user: envVars.DATABASE.USER,

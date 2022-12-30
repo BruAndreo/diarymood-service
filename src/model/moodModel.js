@@ -1,7 +1,7 @@
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 
-const SCHEMA = new Schema({
+export const MOOD_SCHEMA = new Schema({
   idMood: {
     type: String,
     required: true,
@@ -36,10 +36,4 @@ const SCHEMA = new Schema({
   collection: 'moods'
 });
 
-export default class MoodModel {
-
-  static load(conn) {
-    return conn.model('Mood', SCHEMA);
-  }
-
-}
+export default mongoose.model('Mood', MOOD_SCHEMA);
