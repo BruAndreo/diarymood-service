@@ -50,12 +50,14 @@ describe("Mood Service", () => {
 
     mockingoose(MoodModel).toReturn(new Error("Mocking Save error"), 'save');
 
-    const t = async () => {
+    try {
       const service = new MoodService();
       await service.insertNewMood({});
     }
+    catch (e) {
+      expect(e).toEqual(new Error("Falha ao inserir novo Mood"));
+    }
 
-    expect(t).rejects.toThrow(Error);
     expect(DBConnector.setUp).toHaveBeenCalledTimes(1);
     expect(DBConnector.close).toHaveBeenCalledTimes(1);
   });
