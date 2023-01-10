@@ -8,7 +8,7 @@ export default class MoodsController {
       const body = req.body;
 
       const service = new MoodService();
-      service.insertNewMood(body);
+      await service.insertNewMood(body);
 
       return res.status(StatusCodes.CREATED).json({
         message: "Mood registered"
