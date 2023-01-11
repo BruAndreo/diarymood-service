@@ -5,6 +5,10 @@ import requestMock from "../mocks/requestMock";
 import responseMock from "../mocks/responseMock";
 import { bodyPastDate, correctBodyWithoutMoodDate, bodyFutureDate } from "../mocks/bodysMock";
 
+global.console = {
+  error: jest.fn()
+};
+
 describe("Mood Controller", () => {
 
   let controller;
