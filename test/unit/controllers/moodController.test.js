@@ -3,7 +3,7 @@ import MoodsController from "../../../src/controllers/moodsController";
 import MoodService from "../../../src/service/moodService";
 import requestMock from "../mocks/requestMock";
 import responseMock from "../mocks/responseMock";
-import { bodyPastDate, correctBody } from "../mocks/bodysMock";
+import { bodyPastDate, correctBodyWithoutMoodDate, bodyFutureDate } from "../mocks/bodysMock";
 
 describe("Mood Controller", () => {
 
@@ -17,16 +17,17 @@ describe("Mood Controller", () => {
     controller = null;
   });
 
-  it("Should return success when body was correct", async () => {
-    jest.spyOn(MoodService.prototype, 'insertNewMood').mockImplementation(() => Promise.resolve(true));
+  it("Should return success when body was correct and mood date isnt on body", async () => {
+    const serviceSpy = jest.spyOn(MoodService.prototype, 'insertNewMood').mockImplementation(() => Promise.resolve(true));
 
     let mockReq = requestMock();
-    mockReq.body = correctBody;
+    mockReq.body = correctBodyWithoutMoodDate;
 
     let mockRes = responseMock();
 
     const result = await controller.newMood(mockReq, mockRes);
 
+    expect(serviceSpy.mock.calls[0][0].moodtime).toBeDefined();
     expect(result.status).toHaveBeenCalledWith(201);
     expect(result.json).toHaveBeenCalledWith({ message: "Mood registered" });
   });
@@ -40,9 +41,23 @@ describe("Mood Controller", () => {
 
     const result = await controller.newMood(mockReq, mockRes);
 
-    expect(serviceSpy). toHaveBeenCalledWith(bodyPastDate);
+    expect(serviceSpy).toHaveBeenCalledWith(bodyPastDate);
     expect(result.status).toHaveBeenCalledWith(201);
     expect(result.json).toHaveBeenCalledWith({ message: "Mood registered" });
+  });
+
+  it("Should return error when moodtime is from future", async () => {
+    jest.spyOn(MoodService.prototype, 'insertNewMood').mockImplementation(() => Promise.resolve(true));
+
+    let mockReq = requestMock();
+    mockReq.body = bodyFutureDate;
+
+    let mockRes = responseMock();
+
+    const result = await controller.newMood(mockReq, mockRes);
+
+    expect(result.status).toHaveBeenCalledWith(400);
+    expect(result.json).toHaveBeenCalledWith({ message: "Isn't possible insert a future mood" });
   });
 
 });
