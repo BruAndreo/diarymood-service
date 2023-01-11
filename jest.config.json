@@ -1,3 +1,6 @@
 {
-  "transform": {}
+  "transform": {},
+  "restoreMocks": true,
+  "clearMocks": true,
+  "resetMocks": true
 }

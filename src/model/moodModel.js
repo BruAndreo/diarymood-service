@@ -26,6 +26,10 @@ export const MOOD_SCHEMA = new Schema({
     type: [String],
     required: false
   },
+  moodTime: {
+    type: Date,
+    required: true
+  },
   createdAt: {
     type: Date,
     default: new Date().toISOString(),
