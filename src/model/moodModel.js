@@ -26,7 +26,7 @@ export const MOOD_SCHEMA = new Schema({
     type: [String],
     required: false
   },
-  moodTime: {
+  moodtime: {
     type: Date,
     required: true
   },
