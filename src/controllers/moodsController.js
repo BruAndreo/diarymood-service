@@ -1,16 +1,6 @@
-import * as yup from "yup";
 import { StatusCodes } from "http-status-codes";
-import ValidationException from "../exceptions/validationException.js";
 import MoodService from "../service/moodService.js";
 import { validate } from "../validators/moodValidator.js";
-
-// const SCHEMA = yup.object().shape({
-//   mood: yup.string().min(3).required(),
-//   context: yup.string().min(3).required(),
-//   goods: yup.array().of(yup.string()),
-//   bads: yup.array().of(yup.string()),
-//   moodtime: yup.string().default(new Date().toISOString())
-// });
 
 export default class MoodsController {
 
