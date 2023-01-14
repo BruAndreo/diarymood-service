@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import ValidationException from "../exceptions/validationException.js";
 
 const validDate = (moodtime) => {
   const now = new Date();
@@ -25,8 +26,13 @@ const schema = yup.object().shape({
 });
 
 export const validate = (mood) => {
-  const validatedMood = schema.validateSync(mood);
-  validatedMood.moodtime = validDate(validatedMood.moodtime)
+  try {
+    const validatedMood = schema.validateSync(mood);
+    validatedMood.moodtime = validDate(validatedMood.moodtime)
 
-  return validatedMood;
+    return validatedMood;
+  }
+  catch (e) {
+    throw new ValidationException(e.message);
+  }
 };

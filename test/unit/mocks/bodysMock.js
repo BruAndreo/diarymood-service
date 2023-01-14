@@ -29,3 +29,17 @@ export const bodyFutureDate = {
   "bads": ["job"],
   "moodtime": "2030-12-31T03:00:00-03:00"
 };
+
+export const bodyWithoutContext = {
+  "mood": "Good",
+  "goods": ["test"],
+  "bads": ["job"],
+  "moodtime": "2030-12-31T03:00:00-03:00"
+};
+
+export const bodyContextLessTree = {
+  "mood": "Good",
+  "goods": ["test"],
+  "bads": ["job"],
+  "moodtime": "2030-12-31T03:00:00-03:00"
+};
