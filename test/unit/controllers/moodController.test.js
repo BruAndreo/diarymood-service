@@ -84,4 +84,16 @@ describe("Mood Controller", () => {
     expect(result.json).toHaveBeenCalledWith({ message: "context is a required field" });
   });
 
+  it("Should return error when context has less than 3 characters", async () => {
+    jest.spyOn(MoodService.prototype, 'insertNewMood').mockImplementation(() => Promise.resolve(true));
+
+    const result = await controller.newMood(
+      requestMock({}, {}, bodyContextLessTree),
+      responseMock()
+    );
+
+    expect(result.status).toHaveBeenCalledWith(400);
+    expect(result.json).toHaveBeenCalledWith({ message: "context is a required field" });
+  });
+
 });
