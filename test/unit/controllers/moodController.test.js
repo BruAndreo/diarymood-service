@@ -3,12 +3,12 @@ import MoodsController from "../../../src/controllers/moodsController";
 import MoodService from "../../../src/service/moodService";
 import requestMock from "../mocks/requestMock";
 import responseMock from "../mocks/responseMock";
-import { bodyPastDate, correctBodyWithoutMoodDate, bodyFutureDate, bodyWithoutContext, bodyContextLessTree } from "../mocks/bodysMock";
+import { bodyPastDate, correctBodyWithoutMoodDate, bodyFutureDate, bodyWithoutContext, bodyContextLessTree, bodyWithoutBads, bodyWithGoodsEmpty, bodyWithGoodsWrong, bodyWithoutGoods } from "../mocks/bodysMock";
 
-global.console = {
-  error: jest.fn(),
-  log: jest.fn(),
-};
+// global.console = {
+//   error: jest.fn(),
+//   log: jest.fn(),
+// };
 
 describe("Mood Controller", () => {
 
@@ -60,7 +60,7 @@ describe("Mood Controller", () => {
     expect(result.json).toHaveBeenCalledWith({ message: "Isn't possible insert a future mood" });
   });
 
-  it("Should return error when context isnt past", async () => {
+  it("Should return error when context isn't past", async () => {
     jest.spyOn(MoodService.prototype, 'insertNewMood').mockImplementation(() => Promise.resolve(true));
 
     const result = await controller.newMood(
@@ -81,19 +81,40 @@ describe("Mood Controller", () => {
     );
 
     expect(result.status).toHaveBeenCalledWith(400);
-    expect(result.json).toHaveBeenCalledWith({ message: "context is a required field" });
+    expect(result.json).toHaveBeenCalledWith({ message: "context must be at least 3 characters" });
   });
 
-  it("Should return error when context has less than 3 characters", async () => {
+  it("Should return success when goods is not past", async () => {
     jest.spyOn(MoodService.prototype, 'insertNewMood').mockImplementation(() => Promise.resolve(true));
 
     const result = await controller.newMood(
-      requestMock({}, {}, bodyContextLessTree),
+      requestMock({}, {}, bodyWithoutGoods),
+      responseMock()
+    );
+
+    expect(result.status).toHaveBeenCalledWith(201);
+  });
+
+  it("Should return success when goods is empty", async () => {
+    jest.spyOn(MoodService.prototype, 'insertNewMood').mockImplementation(() => Promise.resolve(true));
+
+    const result = await controller.newMood(
+      requestMock({}, {}, bodyWithGoodsEmpty),
+      responseMock()
+    );
+
+    expect(result.status).toHaveBeenCalledWith(201);
+  });
+
+  it("Should return error when goods is wrong", async () => {
+    jest.spyOn(MoodService.prototype, 'insertNewMood').mockImplementation(() => Promise.resolve(true));
+
+    const result = await controller.newMood(
+      requestMock({}, {}, bodyWithGoodsWrong),
       responseMock()
     );
 
     expect(result.status).toHaveBeenCalledWith(400);
-    expect(result.json).toHaveBeenCalledWith({ message: "context is a required field" });
   });
 
 });

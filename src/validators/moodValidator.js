@@ -20,8 +20,8 @@ const validDate = (moodtime) => {
 const schema = yup.object().shape({
   mood: yup.string().min(3).required(),
   context: yup.string().min(3).required(),
-  goods: yup.array().of(yup.string()),
-  bads: yup.array().of(yup.string()),
+  goods: yup.array().of(yup.string()).notRequired(),
+  bads: yup.array().of(yup.string()).notRequired(),
   moodtime: yup.string().default(new Date().toISOString())
 });
 
