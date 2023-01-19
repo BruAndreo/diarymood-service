@@ -3,12 +3,24 @@ import MoodsController from "../../../src/controllers/moodsController";
 import MoodService from "../../../src/service/moodService";
 import requestMock from "../mocks/requestMock";
 import responseMock from "../mocks/responseMock";
-import { bodyPastDate, correctBodyWithoutMoodDate, bodyFutureDate, bodyWithoutContext, bodyContextLessTree, bodyWithoutBads, bodyWithGoodsEmpty, bodyWithGoodsWrong, bodyWithoutGoods } from "../mocks/bodysMock";
+import {
+  bodyPastDate,
+  correctBodyWithoutMoodDate,
+  bodyFutureDate,
+  bodyWithoutContext,
+  bodyContextLessTree,
+  bodyWithoutBads,
+  bodyWithGoodsEmpty,
+  bodyWithGoodsWrong,
+  bodyWithoutGoods,
+  bodyWithBadsEmpty,
+  bodyWithBadsWrong
+} from "../mocks/bodysMock";
 
-// global.console = {
-//   error: jest.fn(),
-//   log: jest.fn(),
-// };
+global.console = {
+  error: jest.fn(),
+  log: jest.fn(),
+};
 
 describe("Mood Controller", () => {
 
@@ -111,6 +123,39 @@ describe("Mood Controller", () => {
 
     const result = await controller.newMood(
       requestMock({}, {}, bodyWithGoodsWrong),
+      responseMock()
+    );
+
+    expect(result.status).toHaveBeenCalledWith(400);
+  });
+
+  it("Should return success when bads is not past", async () => {
+    jest.spyOn(MoodService.prototype, 'insertNewMood').mockImplementation(() => Promise.resolve(true));
+
+    const result = await controller.newMood(
+      requestMock({}, {}, bodyWithoutBads),
+      responseMock()
+    );
+
+    expect(result.status).toHaveBeenCalledWith(201);
+  });
+
+  it("Should return success when bads is empty", async () => {
+    jest.spyOn(MoodService.prototype, 'insertNewMood').mockImplementation(() => Promise.resolve(true));
+
+    const result = await controller.newMood(
+      requestMock({}, {}, bodyWithBadsEmpty),
+      responseMock()
+    );
+
+    expect(result.status).toHaveBeenCalledWith(201);
+  });
+
+  it("Should return error when bads is wrong", async () => {
+    jest.spyOn(MoodService.prototype, 'insertNewMood').mockImplementation(() => Promise.resolve(true));
+
+    const result = await controller.newMood(
+      requestMock({}, {}, bodyWithBadsWrong),
       responseMock()
     );
 
